@@ -1,0 +1,35 @@
+# Render manifest for declarative deployments
+# This file is a template ready to be used by Render's "Create from Repository" flow.
+# Replace placeholder secrets and, if desired, set the `repo` value to your repo URL.
+
+services:
+  - type: web
+    name: intern-backend
+    env: node
+    region: oregon
+    plan: starter
+    # Optional: set repo to your GitHub repo URL if you want Render to know which repo
+    # repo: https://github.com/<your-username>/intern_backend.git
+    branch: main
+    buildCommand: npm ci --prefer-offline --no-audit --production
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    disk:
+      name: intern-backend-data
+      sizeGB: 1
+      mountPath: /data
+    envVars:
+      - key: DB_PATH
+        value: /data/database.sqlite
+        sync: false
+      - key: JWT_SECRET
+        value: "REPLACE_WITH_A_STRONG_SECRET"
+        sync: false
+      - key: NODE_ENV
+        value: production
+        sync: false
+
+# If you prefer to manage env vars through the Render dashboard, remove or blank out the
+# values above and add them in the Render UI instead.
+
